@@ -70,6 +70,18 @@ def process_spod_zero(start_time, end_time):
         spod_stats2 = compute_basic_stats(st.session_state.spod,start_time,end_time,'Spod_time_only')
         st.dataframe(spod_stats2, use_container_width=True)
         
+        #add download button
+        shortdf = shorten_to_print(st.session_state.spod,start_time,end_time,'Spod_time_only')
+               
+        csv_data = convert_df_to_csv(shortdf)
+        st.download_button(
+        label="Download zero audit period SPOD data as CSV",
+        data=csv_data,
+        file_name='session_data_SPODzero.csv',
+        mime='text/csv'
+        )
+        
+        
 # Define function for processing cal gas (SPOD only)
 def process_spod_cal(start_time, end_time, slope, intercept, cal_column):
     if st.session_state.spod is not None:
@@ -88,7 +100,18 @@ def process_spod_cal(start_time, end_time, slope, intercept, cal_column):
         # just test that it gets the correct data 
         st.write('SPOD Percent Difference: Where data <1 mv change')
         spod_percentdiff = percentdiff(st.session_state.spod,'MV', start_time, end_time, 'Spod_time_only', 'TVOC', Gas_concentration)
-        st.dataframe(spod_percentdiff)       
+        st.dataframe(spod_percentdiff)   
+        
+        #add download button
+        shortdf = shorten_to_print(st.session_state.spod,start_time,end_time,'Spod_time_only')
+               
+        csv_data = convert_df_to_csv(shortdf)
+        st.download_button(
+        label="Download cal audit period SPOD data as CSV",
+        data=csv_data,
+        file_name='session_data_SPODcal.csv',
+        mime='text/csv'
+        )
        
         # Add more processing as needed
 
@@ -120,6 +143,29 @@ def process_meteorologicaldata(start_time, end_time):
         time_columndf1='Spod_time_only'
         time_columndf2='MST_time_only'
         plot_metdata(st.session_state.spod, time_columndf1 , st.session_state.kestrel_avg,time_columndf2, keywords3, start_time, end_time)
+        
+        #add download button
+        shortdf_spod = shorten_to_print(st.session_state.spod,start_time,end_time,'Spod_time_only')
+               
+        csv_data = convert_df_to_csv(shortdf_spod)
+        st.download_button(
+        label="Download met audit period SPOD data as CSV",
+        data=csv_data,
+        file_name='session_data_SPODmet.csv',
+        mime='text/csv'
+        )
+        
+        #add download button
+        shortdf_kest = shorten_to_print(st.session_state.kestrel_avg,start_time,end_time,'MST_time_only')
+               
+        csv_data = convert_df_to_csv(shortdf_kest)
+        st.download_button(
+        label="Download met audit period Kestrel data as CSV",
+        data=csv_data,
+        file_name='session_data_Kestrelmet.csv',
+        mime='text/csv'
+        )
+
 
 
 

@@ -14,6 +14,10 @@ import streamlit as st
 from datetime import datetime, timedelta
 
 
+# Function to convert DataFrame to CSV
+def convert_df_to_csv(df):
+    return df.to_csv(index=False).encode('utf-8')
+
 def convert_uct2mst(df, utc_column, mst_column, time_only_column):
     # Convert the time column from string to datetime format
     df[utc_column] = pd.to_datetime(df[utc_column])
@@ -186,14 +190,9 @@ def mergeKestrel(uploaded_files, header_row = 3):
 def shorten_to_analysis(df,time_column, start_time,end_time):
     df = df.set_index(time_column)
     analysis_data = df[(df.index >= start_time) & (df.index <= end_time)]
+       
     return analysis_data
 
-
-def shorten_to_analysis_kestrel(df,time_column, start_time,end_time):
-    
-    df = df.set_index(time_column)
-    analysis_data = df[(df.index >= start_time) & (df.index <= end_time)]
-    return analysis_data
 
 #zero air audit
 def create_plotszero(df,x_keyword,y_keyword,start_time,end_time,time_column):
@@ -429,6 +428,17 @@ def plot_metdata(df1, time_columndf1, df2, time_columndf2, keywords, start_time,
     plt.gcf().autofmt_xdate()
     st.pyplot(fig)
 
+
+    
+def shorten_to_print(df,start_time,end_time,time_column):
+    # Convert start/end times from strings to datetime
+    start_time = pd.to_datetime(start_time)
+    end_time = pd.to_datetime(end_time)
+    
+    shortdf = df[(df[time_column] >= start_time) & (df[time_column] <= end_time)]
+    
+    
+    return shortdf
 
     
     
